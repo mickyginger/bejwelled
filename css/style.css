@@ -1,0 +1,51 @@
+* {
+  box-sizing: border-box;
+}
+
+.grid {
+  width: 500px;
+  height: 500px;
+  margin: auto;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.grid div {
+  width: 50px;
+  height: 50px;
+  border: 2px solid;
+}
+
+.ruby {
+  background-image: url(http://image.shutterstock.com/z/stock-photo-212375152.jpg);
+  background-size: 300%;
+  background-position: -6px -2px;
+}
+
+.sapphire {
+  background-image: url(http://image.shutterstock.com/z/stock-photo-212375152.jpg);
+  background-size: 300%;
+  background-position: -6px -43px;
+}
+
+.diamond {
+  background-image: url(http://image.shutterstock.com/z/stock-photo-212375152.jpg);
+  background-size: 300%;
+  background-position: -6px -85px;
+}
+
+.emerald {
+  background-image: url(http://image.shutterstock.com/z/stock-photo-212375152.jpg);
+  background-size: 300%;
+  background-position: -47px -3px;
+}
+
+.quartz {
+  background-image: url(http://image.shutterstock.com/z/stock-photo-212375152.jpg);
+  background-size: 300%;
+  background-position: 49px -3px;
+}
+
+[data-to-remove] {
+  border: 2px solid yellow !important;
+}
