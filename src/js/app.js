@@ -1,6 +1,6 @@
 const gems = ['amethyst', 'topaz', 'diamond', 'opal', 'ruby', 'sapphire'];
 const width = 10;
-const matchAudio = new Audio('../audio/match.mp3');
+const matchAudio = new Audio('public/audio/match.mp3');
 let score = 0;
 let hiScore = window.localStorage.getItem('hiScore') || 0;
 
