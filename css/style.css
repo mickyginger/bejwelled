@@ -8,44 +8,74 @@
   margin: auto;
   display: flex;
   flex-flow: row wrap;
+  cursor: pointer;
+  overflow: hidden;
 }
 
-.grid div {
+.grid .col {
+  height: 1000px;
+  margin-top: -500px;
+  display: flex;
+  flex-flow: column-reverse wrap;
+}
+
+.grid .col > div {
   width: 50px;
   height: 50px;
-  border: 2px solid;
 }
 
-.ruby {
-  background-image: url(http://image.shutterstock.com/z/stock-photo-212375152.jpg);
-  background-size: 300%;
-  background-position: -6px -2px;
+.amethyst {
+  background-image: url(../images/amethyst.png);
+  background-size: cover;
 }
 
-.sapphire {
-  background-image: url(http://image.shutterstock.com/z/stock-photo-212375152.jpg);
-  background-size: 300%;
-  background-position: -6px -43px;
+.aquamarine {
+  background-image: url(../images/aquamarine.png);
+  background-size: cover;
 }
 
 .diamond {
-  background-image: url(http://image.shutterstock.com/z/stock-photo-212375152.jpg);
-  background-size: 300%;
-  background-position: -6px -85px;
+  background-image: url(../images/diamond.png);
+  background-size: cover;
 }
 
-.emerald {
-  background-image: url(http://image.shutterstock.com/z/stock-photo-212375152.jpg);
-  background-size: 300%;
-  background-position: -47px -3px;
+.opal {
+  background-image: url(../images/opal.png);
+  background-size: cover;
 }
 
-.quartz {
-  background-image: url(http://image.shutterstock.com/z/stock-photo-212375152.jpg);
-  background-size: 300%;
-  background-position: 49px -3px;
+.ruby {
+  background-image: url(../images/ruby.png);
+  background-size: cover;
 }
 
-[data-to-remove] {
-  border: 2px solid yellow !important;
+.sapphire {
+  background-image: url(../images/sapphire.png);
+  background-size: cover;
+}
+
+.topaz {
+  background-image: url(../images/topaz.png);
+  background-size: cover;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+
+  50% {
+    transform: scale3d(1.2, 1.2, 1.2);
+  }
+
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.pulse {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  animation-name: pulse;
+  animation-iteration-count: infinite;
 }

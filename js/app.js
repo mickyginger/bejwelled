@@ -1,144 +1,237 @@
-// TODO move all data-attributes to arrays of indecies to reduce DOM modification
-// TODO break up cell click handler
-
-const gems = ['ruby', 'sapphire', 'diamond', 'emerald', 'quartz'];
+const gems = ['amethyst', 'topaz', 'diamond', 'opal', 'ruby', 'sapphire'];
 const width = 10;
-let $cells = null;
+const matchAudio = new Audio('audio/match.mp3');
 let score = 0;
-let started = false;
+let hiScore = window.localStorage.getItem('hiScore') || 0;
 
 const $grid = $('.grid');
 const $score = $('.score');
+const $hiScore = $('.hi-score');
+const $timer = $('.timer');
+const $playAgain = $('.again');
+const $currentStreak = $('.current-streak');
+let timerId = null;
+let currentTime = 60;
+let gameOver = false;
+
+let $movingGem = null;
+let possibleMoves = [];
+let currentStreakLength = 0;
+
+$hiScore.text(hiScore);
+
+function startTimer() {
+  if(timerId) clearInterval(timerId);
+  $timer.html(currentTime);
+  timerId = setInterval(() => {
+    currentTime--;
+    $timer.html(currentTime);
+    if(currentTime === 0) {
+      clearInterval(timerId);
+      timerId = null;
+      endGame();
+    }
+  }, 1000);
+}
 
 function makeGrid() {
-  for (var i = 0; i < width * width; i++) {
-    $grid.append($('<div />'));
-  }
-  $cells = $grid.find('div');
-}
-
-function randomizeEmptyCells() {
-  $cells.not('.ruby, .sapphire, .diamond, .emerald, .quartz').each((i, cell) => {
-    $(cell).addClass(gems[Math.floor(Math.random() * gems.length)]);
-  });
-}
-
-function getRows() {
-  let i = width;
-  const rows = [];
-  while(i--) {
-    rows.push($cells.slice(i * width, i * width + width).toArray());
-  }
-  return rows;
-}
-
-function getColumns() {
-  let i = width;
-  const cols = [];
-  while(i--) {
-    const col = [];
-    for (let j = 0; j < width; j++) {
-      col.push($cells[i+width*j]);
+  $grid.empty();
+  let cols = width;
+  while(cols--) {
+    const $col = $('<div />', { class: 'col' });
+    for (let i = 0; i < width; i++) {
+      const $cell = $('<div />', { class: getRandomGem() });
+      $col.append($cell);
     }
-    cols.push(col);
+    $grid.append($col);
   }
-  return cols;
+  while(removeStreaks(true));
 }
 
-function findStreaks(lines) {
-  lines.forEach(line => {
-    const $line = $(line);
-    let count = 1;
-    let lastGem = null;
-    $line.each((i, cell) => {
-      const gem = cell.classList[0];
-      if(gem === lastGem) count++;
-      else count = 1;
-      lastGem = gem;
-      if(count >= 3) $line.slice(i-count+1, i+1).attr('data-to-remove', true);
-    });
+function getRandomGem() {
+  return gems[Math.floor(Math.random() * gems.length)];
+}
+
+function getLines() {
+  const lines = [];
+  let i = width;
+  while(i--) {
+    lines.push([]);
+  }
+
+  $grid.find('.col div').each((i, cell) => {
+    lines[i%width].push(cell);
   });
-}
 
-function removeStreaks(next) {
-  const $cellsToRemove = $cells.filter('[data-to-remove=true]');
-  if($cellsToRemove.length === 0) return next();
-  setTimeout(() => {
-    $cellsToRemove.removeAttr('class data-to-remove');
-    if(started) score += $cellsToRemove.length * 100;
-    $score.html(score);
-    next();
-  }, started ? 500 : 0);
-}
-
-function removeBlanks(next) {
-  getColumns().forEach(col => {
-    const gems = col.map(cell => cell.classList[0]).filter(gem => !!gem).reverse();
-    if(gems.length < width) {
-      col.reverse().forEach((cell, i) => $(cell).removeAttr('data-to-remove class').addClass(gems[i]));
-    }
+  $grid.find('.col').each((i, col) => {
+    lines.push($(col).find('div').toArray());
   });
-  return setTimeout(next, started ? 500 : 0);
+
+  return lines;
 }
 
-function updateGrid() {
-  $grid.addClass('updating');
-  removeStreaks(() => {
-    removeBlanks(() => {
-      randomizeEmptyCells();
-      findStreaks(getRows());
-      findStreaks(getColumns());
+function getStreakFromLine(streak, line) {
+  let count = 0;
+  let lastGem = null;
+  line.forEach((cell, i, line) => {
+    const gem = cell.className;
 
-      if($('[data-to-remove]').length > 0) {
-        updateGrid();
-      } else {
-        $grid.removeClass('updating');
-        started = true;
-      }
-    });
-  });
-}
-
-let $cellToMove = null;
-let $cellToSwap = null;
-
-$grid.on('click', 'div', (e) => {
-  if($grid.hasClass('updating')) return false;
-  if(!$cellToMove) {
-    $cellToMove = $(e.target);
-    const cellIndex = $cellToMove.index();
-    const possibleMoveMatrix = [cellIndex-1, cellIndex+1, cellIndex-width, cellIndex+width];
-    $cells.filter((i) => {
-      return possibleMoveMatrix.includes(i);
-    }).attr('data-possible-move', true);
-  } else {
-    $cellToSwap = $(e.target);
-
-    const gemToMove = $cellToMove[0].classList[0];
-    const gemToSwap = $cellToSwap[0].classList[0];
-    $cellToMove.removeAttr('class').addClass(gemToSwap);
-    $cellToSwap.removeAttr('class').addClass(gemToMove);
-
-    findStreaks(getRows());
-    findStreaks(getColumns());
-
-    if($('[data-to-remove]').length > 0 && $cellToSwap.attr('data-possible-move')) {
-      $cellToMove = null;
-      $cellToSwap = null;
-      updateGrid();
+    if(gem === lastGem) {
+      count++;
+      if(line[line.length-1] === line[i] && count >= 3) streak = streak.concat(line.slice(i-count+1, i+1));
     } else {
-      setTimeout(() => {
-        $cellToMove.removeAttr('class').addClass(gemToMove);
-        $cellToSwap.removeAttr('class').addClass(gemToSwap);
-        $cellToMove = null;
-        $cellToSwap = null;
-      }, 250);
+      if(count >= 3) streak = streak.concat(line.slice(i-count, i));
+      count = 1;
     }
 
-    $cells.removeAttr('data-possible-move');
-  }
-});
+    lastGem = gem;
+  });
+  return streak;
+}
 
+function findStreaks() {
+  const lines = getLines();
+  const streaks = lines.reduce(getStreakFromLine, []);
+  return Array.from(new Set(streaks));
+}
+
+function updateScore(streak) {
+  score += streak * 100;
+
+  switch(true) {
+    case streak > 15:
+      score *= 2.5;
+      break;
+    case streak >= 15:
+      score *= 2.25;
+      break;
+    case streak >= 12:
+      score *= 2;
+      break;
+    case streak >= 9:
+      score *= 1.75;
+      break;
+    case streak >= 6:
+      score *= 1.5;
+      break;
+  }
+
+  score = Math.round(score);
+
+  $score.text(score);
+}
+
+function removeStreaks(noDelay) {
+  const streaks = findStreaks();
+  if(streaks.length === 0 && !noDelay) {
+    updateScore(currentStreakLength);
+  }
+  if(streaks.length > 0 && !noDelay) {
+    currentStreakLength += streaks.length;
+    $currentStreak.text(currentStreakLength);
+    matchAudio.pause();
+    matchAudio.currentTime = 0;
+    matchAudio.play();
+  }
+  let animationCount = 0;
+  streaks.forEach(cell => {
+    const $cell = $(cell);
+    const $col = $cell.parent();
+
+    if(noDelay) {
+      $cell
+        .removeAttr('class')
+        .appendTo($col)
+        .addClass(getRandomGem());
+    } else {
+      const delay = $cell.prev().is(':animated') ? 800 : 400;
+      $col
+        .append($('<div />', { class: getRandomGem() }));
+
+      $cell
+        .removeAttr('class')
+        .animate({ height: 0 }, delay, 'easeOutBounce', () => {
+
+          $cell.remove();
+
+          animationCount++;
+          if(streaks.length && animationCount === streaks.length) removeStreaks();
+        });
+    }
+  });
+  if(noDelay) return streaks.length;
+}
+
+function establishPossibleMoves($cell){
+  const cellIndex = $cell.index();
+  const $col = $cell.parent();
+  return possibleMoves.push(
+    $cell.prev().get(0),
+    $cell.next().get(0),
+    $col.prev().find('div').eq(cellIndex).get(0),
+    $col.next().find('div').eq(cellIndex).get(0)
+  );
+}
+
+function swapClasses($a, $b) {
+  const classA = $a.attr('class');
+  const classB = $b.attr('class');
+
+  $a.attr('class', classB);
+  $b.attr('class', classA);
+}
+
+function moveGem() {
+  if(gameOver) return false;
+  currentStreakLength = 0;
+  if(!timerId) startTimer();
+  const $cell = $(this);
+  $grid.find('.pulse').removeClass('pulse');
+  if(!$movingGem) {
+    $cell.addClass('pulse');
+    $movingGem = $cell;
+    return establishPossibleMoves($cell);
+  }
+
+  if(possibleMoves.includes(this)) {
+
+    swapClasses($movingGem, $cell);
+
+    const streaks = findStreaks();
+    return setTimeout(() => {
+      if(streaks.length === 0) swapClasses($movingGem, $cell);
+      else removeStreaks();
+      possibleMoves = [];
+      $movingGem = null;
+    }, 500);
+
+  }
+
+  if($cell.is($movingGem)) $movingGem = null;
+}
+
+function endGame() {
+  if(score > hiScore) {
+    hiScore = score;
+    $hiScore.text(hiScore);
+    window.localStorage.setItem('hiScore', hiScore);
+  }
+
+  gameOver = true;
+  currentTime = 60;
+  score = 0;
+  $grid.find('.pulse').removeClass('pulse');
+  possibleMoves = [];
+  $movingGem = null;
+  $playAgain.show();
+}
+
+function reset() {
+  gameOver = false;
+  makeGrid();
+}
+
+$grid.on('click', 'div:not(.col)', moveGem);
+$playAgain.on('click', reset);
 
 makeGrid();
-updateGrid();
