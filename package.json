@@ -1,0 +1,79 @@
+{
+  "name": "project-1-setup",
+  "version": "1.0.0",
+  "description": "WDI setup for project 1",
+  "main": "gulpfile.js",
+  "author": "Mike Hayden <mickyginger@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "postinstall": "gulp deploy"
+  },
+  "gulp": {
+    "srcDir": "src/",
+    "destDir": "public/",
+    "src": {
+      "js": "src/js/",
+      "scss": "src/scss/",
+      "images": "src/images/",
+      "audio": "src/audio/"
+    },
+    "dest": {
+      "js": "public/js/",
+      "css": "public/css/",
+      "images": "public/images/",
+      "audio": "public/audio/"
+    },
+    "main": {
+      "js": "app.js",
+      "index": "index.html",
+      "scss": "style.scss",
+      "server": "index.js",
+      "gulpfile": "gulpfile.js",
+      "packageJson": "package.json"
+    },
+    "output": {
+      "js": "app.js",
+      "css": "style.css"
+    },
+    "selectors": {
+      "all": "*",
+      "js": "**/*.js",
+      "css": "**/*.css",
+      "scss": "**/*.scss",
+      "html": "**/*.html",
+      "images": "**/*.{png,jpg,jpeg,gif,ico}",
+      "audio": "**/*.{mp3,wav,webm,ogg}"
+    }
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "bower": "^1.8.0",
+    "browser-sync": "^2.17.6",
+    "event-stream": "^3.3.4",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-clean": "^0.3.2",
+    "gulp-concat": "^2.6.0",
+    "gulp-htmlhint": "^0.3.1",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-if": "^2.0.2",
+    "gulp-imagemin": "^3.1.1",
+    "gulp-inject": "^4.1.0",
+    "gulp-jshint": "^2.0.2",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-notify": "^2.2.0",
+    "gulp-order": "^1.1.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^2.2.0",
+    "gulp-uglify": "^2.0.0",
+    "htmlhint-stylish": "^1.0.3",
+    "jshint": "^2.9.4",
+    "jshint-stylish": "^2.2.1",
+    "require-dir": "^0.3.1",
+    "gulp-replace": "^0.5.4"
+  }
+}
