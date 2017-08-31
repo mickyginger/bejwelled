@@ -6,7 +6,8 @@
   "author": "Mike Hayden <mickyginger@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "postinstall": "gulp deploy"
+    "postinstall": "gulp deploy",
+    "start": ""
   },
   "gulp": {
     "srcDir": "src/",
