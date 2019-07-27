@@ -82,13 +82,17 @@ function getStreakFromLine(streak, line) {
   let count = 0;
   let lastGem = null;
   line.forEach((cell, i, line) => {
-    const gem = cell.className;
+    const gem = $(cell).attr('class');
 
     if(gem === lastGem) {
       count++;
-      if(line[line.length-1] === line[i] && count >= 3) streak = streak.concat(line.slice(i-count+1, i+1));
+      if(line[line.length-1] === line[i] && count >= 3) {
+        streak = streak.concat(line.slice(i-count+1, i+1));
+      }
     } else {
-      if(count >= 3) streak = streak.concat(line.slice(i-count, i));
+      if(count >= 3) {
+        streak = streak.concat(line.slice(i-count, i));
+      }
       count = 1;
     }
 
