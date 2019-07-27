@@ -1,11 +1,12 @@
 import $ from 'jquery';
 import 'jquery.easing';
+import match from '../audio/match.mp3';
 
 import '../scss/style.scss';
 
 const gems = ['amethyst', 'topaz', 'diamond', 'opal', 'ruby', 'sapphire'];
 const width = 10;
-const matchAudio = new Audio('../audio/match.mp3');
+const matchAudio = new Audio(match);
 let score = 0;
 let hiScore = window.localStorage.getItem('hiScore') || 0;
 
@@ -234,7 +235,6 @@ function endGame() {
 
 function start() {
   gameOver = false;
-  makeGrid();
   $start.attr('disabled', true);
   startTimer();
 }

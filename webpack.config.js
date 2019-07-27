@@ -15,7 +15,7 @@ module.exports = {
       { test: /\.css$/, loader: ['style-loader', 'css-loader'] },
       { test: /\.s(a|c)ss$/, loader: ['style-loader', 'css-loader', 'sass-loader'] },
       {
-        test: /\.(png|jpe?g|gif)$/,
+        test: /\.(png|jpe?g|gif|mp3)$/,
         use: [{ loader: 'url-loader', options: { limit: 5000 } }]
       }
     ]
