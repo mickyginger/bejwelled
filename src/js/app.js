@@ -1,9 +1,15 @@
+import $ from 'jquery';
+import 'jquery.easing';
+
+import '../scss/style.scss';
+
 const gems = ['amethyst', 'topaz', 'diamond', 'opal', 'ruby', 'sapphire'];
 const width = 10;
-const matchAudio = new Audio('public/audio/match.mp3');
+const matchAudio = new Audio('../audio/match.mp3');
 let score = 0;
 let hiScore = window.localStorage.getItem('hiScore') || 0;
 
+const $body = $('body');
 const $grid = $('.grid');
 const $score = $('.score');
 const $hiScore = $('.hi-score');
@@ -19,6 +25,8 @@ let possibleMoves = [];
 let currentStreakLength = 0;
 
 $hiScore.text(hiScore);
+
+$body.addClass(getRandomGem());
 
 function startTimer() {
   if(timerId) clearInterval(timerId);
@@ -45,6 +53,7 @@ function makeGrid() {
     }
     $grid.append($col);
   }
+
   while(removeStreaks(true));
 }
 
@@ -59,13 +68,9 @@ function getLines() {
     lines.push([]);
   }
 
-  $grid.find('.col div').each((i, cell) => {
-    lines[i%width].push(cell);
-  });
+  $grid.find('.col div').each((i, cell) => lines[i%width].push(cell));
 
-  $grid.find('.col').each((i, col) => {
-    lines.push($(col).find('div').toArray());
-  });
+  $grid.find('.col').each((i, col) => lines.push($(col).find('div').toArray()));
 
   return lines;
 }

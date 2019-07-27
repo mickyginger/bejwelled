@@ -1,15 +1,79 @@
+$amethyst: #d254ad;
+$diamond: #d6d7d9;
+$opal: #46b6e4;
+$ruby: #a62e1e;
+$sapphire: #e9be2e;
+$topaz: #60ac4a;
+
 * {
   box-sizing: border-box;
 }
 
+body {
+  &.amethyst {
+    background-color: $amethyst;
+
+    .grid {
+      border-color: darken($amethyst, 10%) darken($amethyst, 10%)
+        lighten($amethyst, 10%) lighten($amethyst, 10%);
+    }
+  }
+
+  &.diamond {
+    background-color: $diamond;
+
+    .grid {
+      border-color: darken($diamond, 10%) darken($diamond, 10%)
+        lighten($diamond, 10%) lighten($diamond, 10%);
+    }
+  }
+
+  &.opal {
+    background-color: $opal;
+
+    .grid {
+      border-color: darken($opal, 10%) darken($opal, 10%)
+        lighten($opal, 10%) lighten($opal, 10%);
+    }
+  }
+  &.ruby {
+    background-color: $ruby;
+
+    .grid {
+      border-color: darken($ruby, 10%) darken($ruby, 10%)
+        lighten($ruby, 10%) lighten($ruby, 10%);
+    }
+  }
+
+  &.sapphire {
+    background-color: $sapphire;
+
+    .grid {
+      border-color: darken($sapphire, 10%) darken($sapphire, 10%)
+        lighten($sapphire, 10%) lighten($sapphire, 10%);
+    }
+  }
+  &.topaz {
+    background-color: $topaz;
+
+    .grid {
+      border-color: darken($topaz, 10%) darken($topaz, 10%)
+        lighten($topaz, 10%) lighten($topaz, 10%);
+    }
+  }
+}
+
 .grid {
-  width: 500px;
-  height: 500px;
+  width: 540px;
+  height: 540px;
   margin: auto;
   display: flex;
   flex-flow: row wrap;
   cursor: pointer;
   overflow: hidden;
+  background-color: #fff;
+  border: 10px solid;
+  padding: 10px;
 }
 
 .grid .col {
@@ -22,41 +86,31 @@
 .grid .col > div {
   width: 50px;
   height: 50px;
-}
-
-.amethyst {
-  background-image: url(../images/amethyst.png);
   background-size: cover;
-}
 
-.aquamarine {
-  background-image: url(../images/aquamarine.png);
-  background-size: cover;
-}
+  &.amethyst {
+    background-image: url(../images/amethyst.png);
+  }
 
-.diamond {
-  background-image: url(../images/diamond.png);
-  background-size: cover;
-}
+  &.diamond {
+    background-image: url(../images/diamond.png);
+  }
 
-.opal {
-  background-image: url(../images/opal.png);
-  background-size: cover;
-}
+  &.opal {
+    background-image: url(../images/opal.png);
+  }
 
-.ruby {
-  background-image: url(../images/ruby.png);
-  background-size: cover;
-}
+  &.ruby {
+    background-image: url(../images/ruby.png);
+  }
 
-.sapphire {
-  background-image: url(../images/sapphire.png);
-  background-size: cover;
-}
+  &.sapphire {
+    background-image: url(../images/sapphire.png);
+  }
 
-.topaz {
-  background-image: url(../images/topaz.png);
-  background-size: cover;
+  &.topaz {
+    background-image: url(../images/topaz.png);
+  }
 }
 
 @keyframes pulse {
