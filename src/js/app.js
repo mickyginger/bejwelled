@@ -14,11 +14,12 @@ const $grid = $('.grid');
 const $score = $('.score');
 const $hiScore = $('.hi-score');
 const $timer = $('.timer');
-const $playAgain = $('.again');
+const $start = $('button');
 const $currentStreak = $('.current-streak');
+const timeAvailable = +$timer.text();
 let timerId = null;
-let currentTime = 60;
-let gameOver = false;
+let currentTime = timeAvailable;
+let gameOver = true;
 
 let $movingGem = null;
 let possibleMoves = [];
@@ -27,6 +28,7 @@ let currentStreakLength = 0;
 $hiScore.text(hiScore);
 
 $body.addClass(getRandomGem());
+$body.show();
 
 function startTimer() {
   if(timerId) clearInterval(timerId);
@@ -189,7 +191,6 @@ function swapClasses($a, $b) {
 function moveGem() {
   if(gameOver) return false;
   currentStreakLength = 0;
-  if(!timerId) startTimer();
   const $cell = $(this);
   $grid.find('.pulse').removeClass('pulse');
   if(!$movingGem) {
@@ -223,20 +224,22 @@ function endGame() {
   }
 
   gameOver = true;
-  currentTime = 60;
+  currentTime = timeAvailable;
   score = 0;
   $grid.find('.pulse').removeClass('pulse');
   possibleMoves = [];
   $movingGem = null;
-  $playAgain.show();
+  $start.attr('disabled', false);
 }
 
-function reset() {
+function start() {
   gameOver = false;
   makeGrid();
+  $start.attr('disabled', true);
+  startTimer();
 }
 
 $grid.on('click', 'div:not(.col)', moveGem);
-$playAgain.on('click', reset);
+$start.on('click', start);
 
 makeGrid();

@@ -5,15 +5,21 @@ $ruby: #a62e1e;
 $sapphire: #e9be2e;
 $topaz: #60ac4a;
 
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap');
+
 * {
   box-sizing: border-box;
+  font-family: 'Roboto Mono', sans-serif;
 }
 
 body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   &.amethyst {
     background-color: $amethyst;
 
-    .grid {
+    .grid, .display {
       border-color: darken($amethyst, 10%) darken($amethyst, 10%)
         lighten($amethyst, 10%) lighten($amethyst, 10%);
     }
@@ -22,7 +28,7 @@ body {
   &.diamond {
     background-color: $diamond;
 
-    .grid {
+    .grid, .display {
       border-color: darken($diamond, 10%) darken($diamond, 10%)
         lighten($diamond, 10%) lighten($diamond, 10%);
     }
@@ -31,7 +37,7 @@ body {
   &.opal {
     background-color: $opal;
 
-    .grid {
+    .grid, .display {
       border-color: darken($opal, 10%) darken($opal, 10%)
         lighten($opal, 10%) lighten($opal, 10%);
     }
@@ -39,7 +45,7 @@ body {
   &.ruby {
     background-color: $ruby;
 
-    .grid {
+    .grid, .display {
       border-color: darken($ruby, 10%) darken($ruby, 10%)
         lighten($ruby, 10%) lighten($ruby, 10%);
     }
@@ -48,7 +54,7 @@ body {
   &.sapphire {
     background-color: $sapphire;
 
-    .grid {
+    .grid, .display {
       border-color: darken($sapphire, 10%) darken($sapphire, 10%)
         lighten($sapphire, 10%) lighten($sapphire, 10%);
     }
@@ -56,17 +62,24 @@ body {
   &.topaz {
     background-color: $topaz;
 
-    .grid {
+    .grid, .display {
       border-color: darken($topaz, 10%) darken($topaz, 10%)
         lighten($topaz, 10%) lighten($topaz, 10%);
     }
   }
 }
 
+button {
+  border: 3px solid;
+  width: 100%;
+  padding: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
 .grid {
   width: 540px;
   height: 540px;
-  margin: auto;
   display: flex;
   flex-flow: row wrap;
   cursor: pointer;
@@ -110,6 +123,22 @@ body {
 
   &.topaz {
     background-image: url(../images/topaz.png);
+  }
+}
+
+.display {
+  background-color: #fff;
+  border: 10px solid;
+  padding: 10px;
+  width: 250px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  & > div {
+    display: flex;
+    justify-content: space-between;
   }
 }
 
